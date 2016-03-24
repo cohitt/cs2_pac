@@ -35,7 +35,13 @@ void setup() {
 
 void draw() {
     clear();
+    stroke(0, 0, 0);
+    PVector oldPosition = pac.getPosition();
+    pac.updatePosition();
+    dots.remove(oldPosition, pac.getPosition());
     dots.render();
     pac.render();
+    stroke(115, 115, 115);
     walls.render();
+    pac.keyPressed();
 }

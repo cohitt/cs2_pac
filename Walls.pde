@@ -34,11 +34,72 @@ class Walls {
 
     // If there is a wall between the two given positions, return the point of collision.
     // Otherwise, return some value that can never be a collision.
-    // Input & Output are in pixel coordinates
+    // Input & Output are in pixel coordinates 
     PVector collision(PVector fromPosition, PVector toPosition) {
+      int positionCount = 0;
+      int pixFromX = pixelToDot(fromPosition.x); 
+      int pixToX = pixelToDot(toPosition.x);
+      int pixFromY = pixelToDot(fromPosition.y);
+      int pixToY = pixelToDot(toPosition.y);
+      // Loop through for each direction and find if there is a wall at any given point within a range
+      if (pixFromY > pixToY) { // North
+        positionCount = pixFromY - pixToY;
+        while (positionCount > 0) {
+          if (horizontal[pixFromX][pixFromY] == true) {
+            return new PVector(dotToPixel(pixFromX),dotToPixel(pixFromY));
+          } else {
+            positionCount = positionCount-1;
+          }
+        }
+      } 
+      if (pixFromX > pixToX) { // West
+        positionCount = pixFromX - pixToX;
+        while (positionCount > 0) {
+          if (vertical[pixFromX][pixFromY] == true) {
+            return new PVector(dotToPixel(pixFromX),dotToPixel(pixFromY));
+          } else {
+            positionCount = positionCount-1;
+          }
+        }
+      } 
+      if (pixFromX < pixToX) { // East
+        positionCount = pixToX - pixFromX;
+        while (positionCount > 0) {
+          if (vertical[pixToX][pixToY] == true) {
+            return new PVector(dotToPixel(pixToX),dotToPixel(pixToY));
+          } else {
+            positionCount = positionCount-1;
+          }
+        }
+      }
+      if (pixFromY < pixToY) { // South
+        positionCount = pixToY - pixFromY;
+        while (positionCount > 0) {
+          if (vertical[pixToX][pixToY] == true) {
+            return new PVector(dotToPixel(pixToX),dotToPixel(pixToY));
+          } else {
+            positionCount = positionCount-1;
+          }
+        }
+      }
+      return new PVector(0,0);
     }
 
     void render() {
+      int col=0;
+      int row=0;
+      while (col+1 < boardWidth) {
+        while (row+1 < boardHeight) {
+          if (vertical[col][row]==true) {
+            line(dotToPixel(col)+(dotSpacing/2), dotToPixel(row)-(dotSpacing/2), dotToPixel(col)+(dotSpacing/2), dotToPixel(row)+(dotSpacing/2));
+          }  
+          if (horizontal[col][row]==true) {
+            line(dotToPixel(col)-(dotSpacing/2), dotToPixel(row)-(dotSpacing/2), dotToPixel(col)+(dotSpacing/2), dotToPixel(row)-(dotSpacing/2));
+          }
+          row++;
+        }
+      col++;
+      row=0;
     }
-
+  }
 }
